@@ -1,6 +1,5 @@
 .env
 *.csv
 *.png
-small.pdf
 .DS_Store
 *.pdf
