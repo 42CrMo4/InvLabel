@@ -17,7 +17,7 @@
 
 #for c in results [
 #align(center + horizon)[
-  #let x = "{\"stockitem\":" + c.at(0) +"}"
+  #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
   #qr-code(x, height: 12mm) 
   = #c.at(1) 
   #c.at(2)

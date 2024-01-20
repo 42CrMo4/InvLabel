@@ -21,34 +21,43 @@ API_TOKEN = secrets["API_TOKEN"]
 # Create an InvenTreeAPI instance with the server address and API token
 api = InvenTreeAPI(SERVER_ADDRESS, token=API_TOKEN)
 
-# Function to process a single Stock ID
-def process_stock_id(stock_id, label_size):
-    item = StockItem(api, stock_id)
-    part = Part(api, item.part)
+# Function to process a single ID (either Part ID or Stock ID)
+def process_id(entity_id, label_size, entity_type):
+    if entity_type == "part":
+        entity = Part(api, entity_id)
+        entity_type_description = "part"
+    elif entity_type == "stock":
+        stock = StockItem(api, entity_id)
+        entity = Part(api, stock.part)
+        entity_type_description = "stockitem"
+    else:
+        print("Invalid entity type")
+        return
 
-    print(part.description)
-    print(part.name)
-    print(part.IPN)
+    print(entity.description)
+    print(entity.name)
+    print(entity.IPN)
 
-    print(item.part)
+    print(entity)
 
-    with open('part.csv', mode='w') as part_csv:
-        part_writer = csv.writer(part_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        part_writer.writerow([stock_id, part.IPN, part.name, part.description])
+    with open('part.csv', mode='w') as entity_csv:
+        entity_writer = csv.writer(entity_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        entity_writer.writerow([entity_id, entity.IPN, entity.name, entity.description, entity_type_description])
 
     # Use the provided label size for the typst command
     typst_command = f"typst compile -f png --ppi 600 {label_size}.typ label.png"
     os.system(typst_command)
 
-# Check if Stock IDs are provided as command-line arguments
-if len(sys.argv) > 2:
-    stock_ids = sys.argv[1:]
-    label_size = sys.argv[-1]  # Use the last argument as label_size
+# Check if IDs are provided as command-line arguments
+if len(sys.argv) > 3:
+    entity_ids = sys.argv[1:-2]
+    label_size = sys.argv[-2]
+    entity_type = sys.argv[-1]
 
-    # Process each Stock ID in the list
-    for stock_id in stock_ids:
-        process_stock_id(stock_id, label_size)
+    # Process each ID in the list
+    for entity_id in entity_ids:
+        process_id(entity_id, label_size, entity_type)
 else:
-    # Prompt the user for a Stock ID
-    stock_id = input("Enter a Stock ID: ")
-    process_stock_id(stock_id, label_size)
+    # Prompt the user for an ID
+    entity_id = input(f"Enter a {entity_type.capitalize()} ID: ")
+    process_id(entity_id, label_size, entity_type)

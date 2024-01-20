@@ -4,6 +4,29 @@ export BROTHER_QL_MODEL=QL-700
 
 #!/bin/bash
 
+echo "Excel trick -> =TEXTVERKETTEN(" ";WAHR;matrix)"
+
+# Prompt the user to choose whether to process Part IDs or Stock IDs
+PS3="Choose an option: "
+select option in Part_IDs Stock_IDs quit; do
+    case $option in
+        Part_IDs)
+            entity_type="part"
+            break
+            ;;
+        Stock_IDs)
+            entity_type="stock"
+            break
+            ;;
+        quit)
+            exit
+            ;;
+        *)
+            echo "Invalid option $REPLY"
+            ;;
+    esac
+done
+
 # Prompt the user to select the label size
 PS3="Select the label size: "
 select label_size in small medium quit; do
@@ -20,11 +43,11 @@ select label_size in small medium quit; do
     esac
 done
 
-# Function to process a single Stock ID
-process_stock_id() {
-    local stock_id=$1
+# Function to process a single ID (either Part ID or Stock ID)
+process_id() {
+    local entity_id=$1
 
-    Python3 inv-stock.py "$stock_id" "$label_size"
+    Python3 inv-stock.py "$entity_id" "$label_size" "$entity_type"
 
     brother_ql print -l 29 --600dpi label.png
     rm *.csv
@@ -33,15 +56,15 @@ process_stock_id() {
 
 # Main loop
 while true; do
-    read -p "Enter a space-separated list of Stock IDs (or 'quit' to exit): " stock_ids
+    read -p "Enter a space-separated list of $entity_type IDs (or 'quit' to exit): " entity_ids
 
     # Check if the user wants to quit
-    if [ "$stock_ids" == "quit" ]; then
+    if [ "$entity_ids" == "quit" ]; then
         break
     fi
 
-    # Process each Stock ID in the list
-    for stock_id in $stock_ids; do
-        process_stock_id "$stock_id"
+    # Process each ID in the list
+    for entity_id in $entity_ids; do
+        process_id "$entity_id"
     done
 done
