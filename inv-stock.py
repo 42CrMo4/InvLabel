@@ -73,14 +73,45 @@ def process_id(entity_id, label_size, entity_type):
     print(brother_ql_output.stdout)
     print(brother_ql_output.stderr)
 
-# Prompt the user to choose whether to process Part IDs or Stock IDs
-entity_type = input("Choose an option (part/stockitem): ").lower()
+# Dictionary for mapping numerical options to entity types
+entity_type_options = {1: "part", 2: "stock"}
 
-# Prompt the user to select the label size
-label_size = input("Select the label size (small/medium): ").lower()
+# Dictionary for mapping numerical options to label sizes
+label_size_options = {1: "small", 2: "medium"}
 
 # Main loop
 while True:
+    print("Options:")
+    print("1. Process Part IDs")
+    print("2. Process Stock IDs")
+    print("0. Quit")
+
+    # Prompt the user to choose an option
+    option = int(input("Choose an option: "))
+
+    if option == 0:
+        break
+    elif option in entity_type_options:
+        # Prompt the user to select the label size
+        entity_type = entity_type_options[option]
+
+        print("Label Sizes:")
+        print("1. Small")
+        print("2. Medium")
+
+        # Prompt the user until a valid label size is entered
+        while True:
+            label_option = int(input("Select the label size: "))
+            
+            if label_option in label_size_options:
+                label_size = label_size_options[label_option]
+                break
+            else:
+                print("Invalid label size option")
+    else:
+        print("Invalid option. Please enter a valid option.")
+        continue  # Restart the loop to ask for a valid option
+
     # Prompt the user for a space-separated list of IDs
     entity_ids = input(f"Enter a space-separated list of {entity_type} IDs (or 'quit' to exit): ")
 
