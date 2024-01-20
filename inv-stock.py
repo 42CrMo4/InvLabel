@@ -42,8 +42,8 @@ def process_stock_id(stock_id, label_size):
 
 # Check if Stock IDs are provided as command-line arguments
 if len(sys.argv) > 2:
-    stock_ids = sys.argv[1]
-    label_size = sys.argv[2]
+    stock_ids = sys.argv[1:]
+    label_size = sys.argv[-1]  # Use the last argument as label_size
 
     # Process each Stock ID in the list
     for stock_id in stock_ids:
