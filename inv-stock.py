@@ -2,8 +2,6 @@
 from inventree.api import InvenTreeAPI
 from inventree.part import Part
 from inventree.stock import StockItem
-from inventree.part import Parameter
-from inventree.part import ParameterTemplate
 
 # Import additional modules
 from dotenv import dotenv_values

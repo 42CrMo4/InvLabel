@@ -22,5 +22,3 @@
   = #c.at(1) 
   #c.at(2)
 ]]
-
-// brother_ql print -l 29 --600dpi Label.png
