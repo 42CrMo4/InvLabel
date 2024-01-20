@@ -23,7 +23,7 @@
     columns(2, gutter: 0pt)[
       //#set par(justify: true) // strech text in even spacing
       #align(center + horizon)[
-        #let x = "{\"stockitem\":" + c.at(0) +"}"
+        #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
         #qr-code(x, height: 14mm) 
         #set text(6pt)
         *#c.at(2)* \
