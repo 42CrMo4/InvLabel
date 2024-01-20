@@ -1,34 +1,30 @@
 #brother_ql -b pyusb discover
 export BROTHER_QL_PRINTER=usb://0x04f9:0x2042
 export BROTHER_QL_MODEL=QL-700  
+
 #!/bin/bash
+
+# Prompt the user to select the label size
+PS3="Select the label size: "
+select label_size in small medium quit; do
+    case $label_size in
+        small|medium)
+            break
+            ;;
+        quit)
+            exit
+            ;;
+        *)
+            echo "Invalid option $REPLY"
+            ;;
+    esac
+done
 
 # Function to process a single Stock ID
 process_stock_id() {
     local stock_id=$1
 
-    Python3 inv-stock.py "$stock_id"
-
-    PS3="Select the operation: "
-
-    select opt in small medium quit; do
-        case $opt in
-            small)
-                typst compile -f png --ppi 600 small.typ label.png
-                break
-                ;;
-            medium)
-                typst compile -f png --ppi 600 medium.typ label.png
-                break
-                ;;
-            quit)
-                break
-                ;;
-            *) 
-                echo "Invalid option $REPLY"
-                ;;
-        esac
-    done
+    Python3 inv-stock.py "$stock_id" "$label_size"
 
     brother_ql print -l 29 --600dpi label.png
     rm *.csv

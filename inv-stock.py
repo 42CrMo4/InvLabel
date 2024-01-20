@@ -9,6 +9,7 @@ from inventree.part import ParameterTemplate
 from dotenv import dotenv_values
 import csv
 import sys  # Added to handle command-line arguments
+import os
 
 # Load environment variables from the '.env' file using dotenv
 secrets = dotenv_values(".env")
@@ -21,7 +22,7 @@ API_TOKEN = secrets["API_TOKEN"]
 api = InvenTreeAPI(SERVER_ADDRESS, token=API_TOKEN)
 
 # Function to process a single Stock ID
-def process_stock_id(stock_id):
+def process_stock_id(stock_id, label_size):
     item = StockItem(api, stock_id)
     part = Part(api, item.part)
 
@@ -35,14 +36,19 @@ def process_stock_id(stock_id):
         part_writer = csv.writer(part_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         part_writer.writerow([stock_id, part.IPN, part.name, part.description])
 
+    # Use the provided label size for the typst command
+    typst_command = f"typst compile -f png --ppi 600 {label_size}.typ label.png"
+    os.system(typst_command)
+
 # Check if Stock IDs are provided as command-line arguments
-if len(sys.argv) > 1:
-    stock_ids = sys.argv[1:]
-    
+if len(sys.argv) > 2:
+    stock_ids = sys.argv[1]
+    label_size = sys.argv[2]
+
     # Process each Stock ID in the list
     for stock_id in stock_ids:
-        process_stock_id(stock_id)
+        process_stock_id(stock_id, label_size)
 else:
     # Prompt the user for a Stock ID
     stock_id = input("Enter a Stock ID: ")
-    process_stock_id(stock_id)
+    process_stock_id(stock_id, label_size)
