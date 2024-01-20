@@ -18,22 +18,21 @@ This project is designed to streamline the process of generating labels for inve
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/your-username/inventory-labeling.git
-   ```
+```bash
+git clone https://github.com/your-username/inventory-labeling.git
+```
 
 2. Navigate to the project directory:
 
 ```bash
-
 cd inventory-labeling
 ```
 
 3.Create a .env file in the project root with the following content:
 
 ```ini
-    SERVER_ADDRESS=your_inventree_server_address
-    API_TOKEN=your_inventree_api_token
+SERVER_ADDRESS=your_inventree_server_address
+API_TOKEN=your_inventree_api_token
 ```
 Replace your_inventree_server_address and your_inventree_api_token with your InvenTree server address and API token.
 
