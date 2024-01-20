@@ -24,9 +24,11 @@ api = InvenTreeAPI(SERVER_ADDRESS, token=API_TOKEN)
 # Function to process a single ID (either Part ID or Stock ID)
 def process_id(entity_id, label_size, entity_type):
     if entity_type == "part":
+        # If the entity is a part, retrieve information using Part class
         entity = Part(api, entity_id)
         entity_type_description = "part"
     elif entity_type == "stock":
+        # If the entity is a stock item, retrieve information using StockItem and Part classes
         stock = StockItem(api, entity_id)
         entity = Part(api, stock.part)
         entity_type_description = "stockitem"
@@ -34,14 +36,17 @@ def process_id(entity_id, label_size, entity_type):
         print("Invalid entity type")
         return
 
+    # Print information about the entity
     print(entity.description)
     print(entity.name)
     print(entity.IPN)
 
-    print(entity)
+    # Print the entity
 
+    # Write entity information to a CSV file
     with open('part.csv', mode='w') as entity_csv:
         entity_writer = csv.writer(entity_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        # Write a row to the CSV file containing ID, IPN, name, description, and entity type
         entity_writer.writerow([entity_id, entity.IPN, entity.name, entity.description, entity_type_description])
 
     # Use the provided label size for the typst command
@@ -50,6 +55,7 @@ def process_id(entity_id, label_size, entity_type):
 
 # Check if IDs are provided as command-line arguments
 if len(sys.argv) > 3:
+    # If command-line arguments are provided, extract entity IDs, label size, and entity type
     entity_ids = sys.argv[1:-2]
     label_size = sys.argv[-2]
     entity_type = sys.argv[-1]
@@ -58,6 +64,6 @@ if len(sys.argv) > 3:
     for entity_id in entity_ids:
         process_id(entity_id, label_size, entity_type)
 else:
-    # Prompt the user for an ID
+    # If no command-line arguments, prompt the user for an ID
     entity_id = input(f"Enter a {entity_type.capitalize()} ID: ")
     process_id(entity_id, label_size, entity_type)

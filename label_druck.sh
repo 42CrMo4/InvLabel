@@ -4,6 +4,7 @@ export BROTHER_QL_MODEL=QL-700
 
 #!/bin/bash
 
+# Print a message about an Excel trick
 echo "Excel trick -> =TEXTVERKETTEN(" ";WAHR;matrix)"
 
 # Prompt the user to choose whether to process Part IDs or Stock IDs
@@ -47,15 +48,20 @@ done
 process_id() {
     local entity_id=$1
 
+    # Run the Python script with provided arguments
     Python3 inv-stock.py "$entity_id" "$label_size" "$entity_type"
 
+    # Print the label using brother_ql with specified parameters
     brother_ql print -l 29 --600dpi label.png
+
+    # Remove temporary CSV and PNG files
     rm *.csv
     rm *.png
 }
 
 # Main loop
 while true; do
+    # Prompt the user for a space-separated list of IDs
     read -p "Enter a space-separated list of $entity_type IDs (or 'quit' to exit): " entity_ids
 
     # Check if the user wants to quit
