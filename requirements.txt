@@ -1,0 +1,13 @@
+# requirements.txt
+
+# InvenTree API library
+inventree==0.13.2
+
+# Python Dotenv for handling environment variables
+python-dotenv==1.0.0
+
+# Brother_QL library for printing labels
+brother_ql==0.9.4
+
+# Typst library for creating QR codes in Typst files
+typst==0.10.0
