@@ -26,7 +26,7 @@
         #let x = "{\"stockitem\":" + c.at(0) +"}"
         #qr-code(x, height: 14mm) 
         #set text(6pt)
-        *#c.at(2)*
+        *#c.at(2)* \
         #set text(5pt)
         #c.at(3)
       ]  
