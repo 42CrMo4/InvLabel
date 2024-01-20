@@ -39,4 +39,4 @@ print(part.IPN)
 with open('part.csv', mode='w') as part_csv:
     part_writer = csv.writer(part_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
  
-    part_writer.writerow([part_id, part.IPN, part.name])
+    part_writer.writerow([part_id, part.IPN, part.name, part.description])
