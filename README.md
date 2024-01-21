@@ -44,7 +44,7 @@ Ensure your Brother QL label printer is connected to your computer.
 You only need to do this at the frist time to sept up the Printer.
 run the following command to find the USB Printer.
 
-Please make sure the needed backend of brother_ql is istalled according to the documentation https://github.com/pklaus/brother_ql#backends
+:bangbang: Please make sure the needed backend of brother_ql is istalled according to the documentation https://github.com/pklaus/brother_ql#backends
 
 ```bash
 brother_ql -b pyusb discover
