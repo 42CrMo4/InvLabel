@@ -9,3 +9,4 @@
 
 # Allow
 !sample-output/*png
+!docs/*png
