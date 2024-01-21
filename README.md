@@ -75,6 +75,7 @@ For this see the documntation of the Typst lib or the online editor at http://ty
 You can try and iterate quickly with only havin the `csv` and `typ` file present in the editor. 
 
 The provided Label designs are for the 29mm endless role. 
+See some samples in the [Sample Folder](sample-output/)
 
 ## Usage
 
