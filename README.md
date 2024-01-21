@@ -39,15 +39,23 @@ Replace `your_inventree_server_address` and `your_inventree_api_token` with your
 
 ## Steup brother_ql
 
-Ensure your Brother QL label printer is connected to your computer.
+Follow this steps:
+- ensure brother_ql is installed
+- prepare the backend (USB or Network)
+- Ensure your Brother QL label printer is connected to your computer.
 
 You only need to do this at the frist time to sept up the Printer.
-run the following command to find the USB Printer.
 
-:bangbang: Please make sure the needed backend of brother_ql is istalled according to the documentation https://github.com/pklaus/brother_ql#backends
+:bangbang: Please make sure the needed backend of brother_ql is istalled according to the documentation https://github.com/pklaus/brother_ql#backends :bangbang:
 
+Run the following command to find the USB (PyUSB) Printer.
 ```bash
 brother_ql -b pyusb discover
+```
+
+Run the following command to find the Network Printer.
+```bash
+brother_ql -b network discover
 ```
 
 use the output to edit the line `export BROTHER_QL_PRINTER` in the `inv-stock.py` file.
@@ -62,9 +70,11 @@ export BROTHER_QL_MODEL=QL-700
 
 ### Label Modification
 
-to alter the design you can adjsut the `medium.typ` and `small.typ` files. These are Typst compiled files. 
+to alter the design you can adjsut the `medium.typ` and `small.typ` files. 
 For this see the documntation of the Typst lib or the online editor at http://typst.app .
 You can try and iterate quickly with only havin the `csv` and `typ` file present in the editor. 
+
+The provided Label designs are for the 29mm endless role. 
 
 ## Usage
 
@@ -90,3 +100,11 @@ See also the Documentation for [brother_ql](https://github.com/pklaus/brother_ql
 Modify the label templates in the .typ files to customize the label format.
 
 The generated labels and CSV file will be saved in the project directory.
+
+## Acknowledgement
+
+refactoring and enhancement with chatGPT. 
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
