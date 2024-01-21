@@ -2,14 +2,12 @@
 from inventree.api import InvenTreeAPI
 from inventree.part import Part
 from inventree.stock import StockItem
-from inventree.part import Parameter
-from inventree.part import ParameterTemplate
 
 # Import additional modules
 from dotenv import dotenv_values
 import csv
-import sys  # Added to handle command-line arguments
 import os
+import subprocess
 
 # Load environment variables from the '.env' file using dotenv
 secrets = dotenv_values(".env")
@@ -20,6 +18,10 @@ API_TOKEN = secrets["API_TOKEN"]
 
 # Create an InvenTreeAPI instance with the server address and API token
 api = InvenTreeAPI(SERVER_ADDRESS, token=API_TOKEN)
+
+# Set brother_ql parameters
+os.environ['BROTHER_QL_PRINTER'] = 'usb://0x04f9:0x2042'
+os.environ['BROTHER_QL_MODEL'] = 'QL-700'
 
 # Function to process a single ID (either Part ID or Stock ID)
 def process_id(entity_id, label_size, entity_type):
@@ -41,8 +43,6 @@ def process_id(entity_id, label_size, entity_type):
     print(entity.name)
     print(entity.IPN)
 
-    # Print the entity
-
     # Write entity information to a CSV file
     with open('part.csv', mode='w') as entity_csv:
         entity_writer = csv.writer(entity_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -51,19 +51,72 @@ def process_id(entity_id, label_size, entity_type):
 
     # Use the provided label size for the typst command
     typst_command = f"typst compile -f png --ppi 600 {label_size}.typ label.png"
-    os.system(typst_command)
+    
+    # Run the typst command and capture the output
+    typst_output = subprocess.run(typst_command, shell=True, text=True, capture_output=True)
+    
+    # Print typst output
+    print("Typst Output:")
+    print(typst_output.stdout)
+    print(typst_output.stderr)
 
-# Check if IDs are provided as command-line arguments
-if len(sys.argv) > 3:
-    # If command-line arguments are provided, extract entity IDs, label size, and entity type
-    entity_ids = sys.argv[1:-2]
-    label_size = sys.argv[-2]
-    entity_type = sys.argv[-1]
+    # Print the label using brother_ql with specified parameters
+    brother_ql_command = f"brother_ql print -l 29 --600dpi label.png"
+    
+    # Run the brother_ql command and capture the output
+    brother_ql_output = subprocess.run(brother_ql_command, shell=True, text=True, capture_output=True)
+    
+    # Print brother_ql output
+    print("Brother_QL Output:")
+    print(brother_ql_output.stdout)
+    print(brother_ql_output.stderr)
+
+# Dictionary for mapping numerical options to entity types
+entity_type_options = {1: "part", 2: "stock"}
+
+# Dictionary for mapping numerical options to label sizes
+label_size_options = {1: "small", 2: "medium"}
+
+# Main loop
+while True:
+    print("Options:")
+    print("1. Process Part IDs")
+    print("2. Process Stock IDs")
+    print("0. Quit")
+
+    # Prompt the user to choose an option
+    option = int(input("Choose an option: "))
+
+    if option == 0:
+        break
+    elif option in entity_type_options:
+        # Prompt the user to select the label size
+        entity_type = entity_type_options[option]
+
+        print("Label Sizes:")
+        print("1. Small")
+        print("2. Medium")
+
+        # Prompt the user until a valid label size is entered
+        while True:
+            label_option = int(input("Select the label size: "))
+            
+            if label_option in label_size_options:
+                label_size = label_size_options[label_option]
+                break
+            else:
+                print("Invalid label size option")
+    else:
+        print("Invalid option. Please enter a valid option.")
+        continue  # Restart the loop to ask for a valid option
+
+    # Prompt the user for a space-separated list of IDs
+    entity_ids = input(f"Enter a space-separated list of {entity_type} IDs (or 'quit' to exit): ")
+
+    # Check if the user wants to quit
+    if entity_ids.lower() == "quit":
+        break
 
     # Process each ID in the list
-    for entity_id in entity_ids:
+    for entity_id in entity_ids.split():
         process_id(entity_id, label_size, entity_type)
-else:
-    # If no command-line arguments, prompt the user for an ID
-    entity_id = input(f"Enter a {entity_type.capitalize()} ID: ")
-    process_id(entity_id, label_size, entity_type)

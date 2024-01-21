@@ -1,5 +1,11 @@
+# Ignore
 .env
 *.csv
 *.png
-small.pdf
+*.pdf
+
 .DS_Store
+
+
+# Allow
+!sample-output/*png

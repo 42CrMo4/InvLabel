@@ -1,7 +1,10 @@
+// Import necessary libraries
 #import "@preview/cades:0.3.0": qr-code
 
+// Read CSV file
 #let results = csv("part.csv", delimiter: ";")
 
+// Set the page size and margins
 #set page(
   width: 29mm, 
   height: 12mm,
@@ -11,16 +14,22 @@
   )
 )
 
+// Set the number of columns on the page
 #set page(columns: 2)
 
+// Set the default text size
 #set text(5pt)
 
+// Loop through the CSV data
 #for c in results [
-#align(center + horizon)[
-  #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
-  #qr-code(x, height: 12mm) 
-  = #c.at(1) 
-  #c.at(2)
-]]
+  // Center-align text horizontally and set the position
+  #align(center + horizon)[
+    // Create a QR code with part information
+    #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
+    #qr-code(x, height: 12mm) 
 
-// brother_ql print -l 29 --600dpi Label.png
+    // Display the part name and description
+    = #c.at(1) \
+    #c.at(2)
+  ]
+]
