@@ -6,6 +6,8 @@ Label printing and design with Typst and local or wireless printing with Brother
 
 This project is designed to streamline the process of generating labels for inventory items stored in an InvenTree database. It utilizes the InvenTree API to retrieve information about parts or stock items and generates labels in different sizes using the Typst and Brother_QL tools.
 
+![image](docs/workflow-overview.png)
+
 ## Prerequisites
 
 - [InvenTree Server](https://github.com/inventree/InvenTree): Ensure you have InvenTree Server running and set up with your inventory data.
