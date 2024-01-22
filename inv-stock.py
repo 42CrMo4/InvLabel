@@ -5,12 +5,14 @@ from inventree.stock import StockItem
 
 # Import necessary modules from the brother_ql library
 from PIL import Image
+import PIL 
+PIL.Image.ANTIALIAS = PIL.Image.LANCZOS
 from brother_ql.conversion import convert
 from brother_ql.backends.helpers import send
 from brother_ql.raster import BrotherQLRaster
 
 # import Typst
-import typst
+#import typst
 
 # Import additional modules
 from dotenv import dotenv_values
@@ -69,7 +71,7 @@ def process_id(entity_id, label_size, entity_type):
     print(typst_output.stdout)
     print(typst_output.stderr)
 
-    typst.compile("{label_size}.typ", output="label.png", format="png", ppi=600.0)
+    #typst.compile("{label_size}.typ", output="label.png", format="png", ppi=600.0)
 
     # Print the label using brother_ql with specified parameters
     #brother_ql_command = f"brother_ql print -l 29 --600dpi label.png"
@@ -96,13 +98,13 @@ def process_id(entity_id, label_size, entity_type):
 
             qlr=qlr, 
             images= [im],    #  Takes a list of file names or PIL objects.
-            label='29x90', 
-            rotate='90',    # 'Auto', '0', '90', '270'
+            label='29', 
+            rotate='0',    # 'Auto', '0', '90', '270'
             threshold=70.0,    # Black and white threshold in percent.
-            dither=False, 
+            dither=True, 
             compress=False, 
             red=False,    # Only True if using Red/Black 62 mm label tape.
-            dpi_600=False, 
+            dpi_600=True, 
             hq=True,    # False for low quality.
             cut=True
 
