@@ -3,6 +3,12 @@ from inventree.api import InvenTreeAPI
 from inventree.part import Part
 from inventree.stock import StockItem
 
+# Import necessary modules from the brother_ql library
+from PIL import Image
+from brother_ql.conversion import convert
+from brother_ql.backends.helpers import send
+from brother_ql.raster import BrotherQLRaster
+
 # Import additional modules
 from dotenv import dotenv_values
 import csv
@@ -20,8 +26,8 @@ API_TOKEN = secrets["API_TOKEN"]
 api = InvenTreeAPI(SERVER_ADDRESS, token=API_TOKEN)
 
 # Set brother_ql parameters
-os.environ['BROTHER_QL_PRINTER'] = 'usb://0x04f9:0x2042'
-os.environ['BROTHER_QL_MODEL'] = 'QL-700'
+#os.environ['BROTHER_QL_PRINTER'] = 'usb://0x04f9:0x2042'
+#os.environ['BROTHER_QL_MODEL'] = 'QL-700'
 
 # Function to process a single ID (either Part ID or Stock ID)
 def process_id(entity_id, label_size, entity_type):
@@ -61,15 +67,43 @@ def process_id(entity_id, label_size, entity_type):
     print(typst_output.stderr)
 
     # Print the label using brother_ql with specified parameters
-    brother_ql_command = f"brother_ql print -l 29 --600dpi label.png"
+    #brother_ql_command = f"brother_ql print -l 29 --600dpi label.png"
     
     # Run the brother_ql command and capture the output
-    brother_ql_output = subprocess.run(brother_ql_command, shell=True, text=True, capture_output=True)
+    #brother_ql_output = subprocess.run(brother_ql_command, shell=True, text=True, capture_output=True)
     
     # Print brother_ql output
-    print("Brother_QL Output:")
-    print(brother_ql_output.stdout)
-    print(brother_ql_output.stderr)
+    #print("Brother_QL Output:")
+    #print(brother_ql_output.stdout)
+    #print(brother_ql_output.stderr)
+
+    im = Image.open('label.png')
+    # im.resize((306, 991)) 
+
+    backend = 'pyusb'    # 'pyusb', 'linux_kernal', 'network'
+    model = 'QL-700' # your printer model.
+    printer = 'usb://0x04f9:0x2042'    # Get these values from the Windows usb driver filter.  Linux/Raspberry Pi uses '/dev/usb/lp0'.
+
+    qlr = BrotherQLRaster(model)
+    qlr.exception_on_warning = True
+
+    instructions = convert(
+
+            qlr=qlr, 
+            images= [im],    #  Takes a list of file names or PIL objects.
+            label='29x90', 
+            rotate='90',    # 'Auto', '0', '90', '270'
+            threshold=70.0,    # Black and white threshold in percent.
+            dither=False, 
+            compress=False, 
+            red=False,    # Only True if using Red/Black 62 mm label tape.
+            dpi_600=False, 
+            hq=True,    # False for low quality.
+            cut=True
+
+    )
+
+    send(instructions=instructions, printer_identifier=printer, backend_identifier=backend, blocking=True)
 
 # Dictionary for mapping numerical options to entity types
 entity_type_options = {1: "part", 2: "stock"}
