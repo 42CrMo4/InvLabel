@@ -7,7 +7,7 @@ inventree==0.13.2
 python-dotenv==1.0.0
 
 # Brother_QL library for printing labels
-brother_ql==0.9.4
+brother-ql-inventree==1.1
 
 # Typst library for creating QR codes in Typst files
 typst==0.10.0
