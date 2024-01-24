@@ -5,11 +5,14 @@ from inventree.stock import StockItem
 
 # Import necessary modules from the brother_ql library
 from PIL import Image
-import PIL 
-PIL.Image.ANTIALIAS = PIL.Image.LANCZOS
+#import PIL 
+#PIL.Image.ANTIALIAS = PIL.Image.LANCZOS
+#import brother_ql_inventree
 from brother_ql.conversion import convert
 from brother_ql.backends.helpers import send
 from brother_ql.raster import BrotherQLRaster
+
+
 
 # import Typst
 #import typst
