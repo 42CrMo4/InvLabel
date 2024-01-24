@@ -5,9 +5,7 @@ from inventree.stock import StockItem
 
 # Import necessary modules from the brother_ql library
 from PIL import Image
-#import PIL 
-#PIL.Image.ANTIALIAS = PIL.Image.LANCZOS
-#import brother_ql_inventree
+
 from brother_ql.conversion import convert
 from brother_ql.backends.helpers import send
 from brother_ql.raster import BrotherQLRaster
@@ -15,7 +13,7 @@ from brother_ql.raster import BrotherQLRaster
 
 
 # import Typst
-#import typst
+import typst
 
 # Import additional modules
 from dotenv import dotenv_values
@@ -67,14 +65,21 @@ def process_id(entity_id, label_size, entity_type):
     typst_command = f"typst compile -f png --ppi 600 {label_size}.typ label.png"
     
     # Run the typst command and capture the output
-    typst_output = subprocess.run(typst_command, shell=True, text=True, capture_output=True)
+    #typst_output = subprocess.run(typst_command, shell=True, text=True, capture_output=True)
     
     # Print typst output
     print("Typst Output:")
-    print(typst_output.stdout)
-    print(typst_output.stderr)
+    #print(typst_output.stdout)
+    #print(typst_output.stderr)
 
-    #typst.compile("{label_size}.typ", output="label.png", format="png", ppi=600.0)
+    #from typst import Compiler
+
+    typst_label_size = f"{label_size}.typ"
+
+    typst.compile(typst_label_size, output="label.png", format="png", ppi=600.0)
+
+    #compiler = typst.Compiler("medium.typ")
+    #compiler.compile(format="png", ppi=144.0)
 
     # Print the label using brother_ql with specified parameters
     #brother_ql_command = f"brother_ql print -l 29 --600dpi label.png"
