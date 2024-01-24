@@ -1,5 +1,5 @@
 // Import necessary libraries
-#import "@preview/cades:0.3.0": qr-code
+#import "@preview/tiaoma:0.1.0": qrcode
 
 // Read CSV file
 #let results = csv("part.csv", delimiter: ";")
@@ -26,7 +26,7 @@
   #align(center + horizon)[
     // Create a QR code with part information
     #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
-    #qr-code(x, height: 12mm, error-correction: "H") 
+    #qrcode(x, height: 12mm) 
 
     // Display the part name and description
     = #c.at(1) \
