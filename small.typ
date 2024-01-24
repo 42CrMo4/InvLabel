@@ -26,7 +26,7 @@
   #align(center + horizon)[
     // Create a QR code with part information
     #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
-    #qr-code(x, height: 12mm) 
+    #qr-code(x, height: 12mm, error-correction: "H") 
 
     // Display the part name and description
     = #c.at(1) \

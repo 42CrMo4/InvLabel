@@ -12,8 +12,8 @@ This project is designed to streamline the process of generating labels for inve
 
 - [InvenTree Server](https://github.com/inventree/InvenTree): Ensure you have InvenTree Server running and set up with your inventory data.
 - [InvenTree Python](https://github.com/inventree/inventree-python): Ensure you have InvenTree Python installed.
-- [Typst](https://github.com/typst/typst): Install Typst to compile label templates into images.
-- [Brother_QL](https://github.com/pklaus/brother_ql): Install Brother_QL to print labels on a Brother QL series label printer.
+- [Typst-Py](https://github.com/messense/typst-py): Install Typst to compile label templates into images.
+- [Brother_QL](https://github.com/matmair/brother_ql-inventree): Install Brother_QL to print labels on a Brother QL series label printer.
 - Python 3.x: Ensure you have Python 3.x installed.
 - [Python Dotenv](https://github.com/theskumar/python-dotenv): Install python dotenv.
 

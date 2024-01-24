@@ -3,11 +3,20 @@ from inventree.api import InvenTreeAPI
 from inventree.part import Part
 from inventree.stock import StockItem
 
+# Import necessary image moduel for brother_ql
+from PIL import Image
+
+# Import necessary modules from the brother_ql library
+from brother_ql.conversion import convert
+from brother_ql.backends.helpers import send
+from brother_ql.raster import BrotherQLRaster
+
+# import Typst
+import typst
+
 # Import additional modules
 from dotenv import dotenv_values
 import csv
-import os
-import subprocess
 
 # Load environment variables from the '.env' file using dotenv
 secrets = dotenv_values(".env")
@@ -18,10 +27,6 @@ API_TOKEN = secrets["API_TOKEN"]
 
 # Create an InvenTreeAPI instance with the server address and API token
 api = InvenTreeAPI(SERVER_ADDRESS, token=API_TOKEN)
-
-# Set brother_ql parameters
-os.environ['BROTHER_QL_PRINTER'] = 'usb://0x04f9:0x2042'
-os.environ['BROTHER_QL_MODEL'] = 'QL-700'
 
 # Function to process a single ID (either Part ID or Stock ID)
 def process_id(entity_id, label_size, entity_type):
@@ -49,27 +54,42 @@ def process_id(entity_id, label_size, entity_type):
         # Write a row to the CSV file containing ID, IPN, name, description, and entity type
         entity_writer.writerow([entity_id, entity.IPN, entity.name, entity.description, entity_type_description])
 
-    # Use the provided label size for the typst command
-    typst_command = f"typst compile -f png --ppi 600 {label_size}.typ label.png"
-    
-    # Run the typst command and capture the output
-    typst_output = subprocess.run(typst_command, shell=True, text=True, capture_output=True)
-    
-    # Print typst output
-    print("Typst Output:")
-    print(typst_output.stdout)
-    print(typst_output.stderr)
+    # Typst compile
+    typst_label_size = f"{label_size}.typ"
 
-    # Print the label using brother_ql with specified parameters
-    brother_ql_command = f"brother_ql print -l 29 --600dpi label.png"
-    
-    # Run the brother_ql command and capture the output
-    brother_ql_output = subprocess.run(brother_ql_command, shell=True, text=True, capture_output=True)
-    
-    # Print brother_ql output
-    print("Brother_QL Output:")
-    print(brother_ql_output.stdout)
-    print(brother_ql_output.stderr)
+    typst.compile(typst_label_size, output="label.png", format="png", ppi=600.0)
+
+    # image preperation
+    im = Image.open('label.png')
+    # im.resize((306, 991)) 
+
+    # brother ql setup
+    backend = 'pyusb'    # 'pyusb', 'linux_kernal', 'network'
+    model = 'QL-700' # your printer model.
+    printer = 'usb://0x04f9:0x2042'    # Get these values from the Windows usb driver filter.  Linux/Raspberry Pi uses '/dev/usb/lp0'.
+
+    qlr = BrotherQLRaster(model)
+    qlr.exception_on_warning = True
+
+    # brother ql label setup
+    instructions = convert(
+
+            qlr=qlr, 
+            images= [im],    #  Takes a list of file names or PIL objects.
+            label='29', 
+            rotate='0',    # 'Auto', '0', '90', '270'
+            threshold=70.0,    # Black and white threshold in percent.
+            dither=True, 
+            compress=False, 
+            red=False,    # Only True if using Red/Black 62 mm label tape.
+            dpi_600=True, 
+            hq=True,    # False for low quality.
+            cut=True
+
+    )
+
+    # brother_ql send
+    send(instructions=instructions, printer_identifier=printer, backend_identifier=backend, blocking=True)
 
 # Dictionary for mapping numerical options to entity types
 entity_type_options = {1: "part", 2: "stock"}
