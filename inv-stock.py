@@ -72,6 +72,7 @@ def process_id(entity_id, label_size, entity_type):
     qlr.exception_on_warning = True
 
     # brother ql label setup
+    # https://stackoverflow.com/a/61771673
     instructions = convert(
 
             qlr=qlr, 
