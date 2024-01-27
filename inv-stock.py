@@ -49,7 +49,7 @@ def process_id(entity_id, label_size, entity_type):
     print(entity.IPN)
 
     # Write entity information to a CSV file
-    with open('part.csv', mode='w') as entity_csv:
+    with open('part.csv', mode='w', encoding="utf-8") as entity_csv:
         entity_writer = csv.writer(entity_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         # Write a row to the CSV file containing ID, IPN, name, description, and entity type
         entity_writer.writerow([entity_id, entity.IPN, entity.name, entity.description, entity_type_description])
