@@ -2,6 +2,7 @@
 from inventree.api import InvenTreeAPI
 from inventree.part import Part
 from inventree.stock import StockItem
+from inventree.stock import StockLocation 
 
 # Import necessary image moduel for brother_ql
 from PIL import Image
@@ -33,12 +34,19 @@ def process_id(entity_id, label_size, entity_type):
     if entity_type == "part":
         # If the entity is a part, retrieve information using Part class
         entity = Part(api, entity_id)
+        ipn = entity.IPN
         entity_type_description = "part"
     elif entity_type == "stock":
         # If the entity is a stock item, retrieve information using StockItem and Part classes
         stock = StockItem(api, entity_id)
         entity = Part(api, stock.part)
+        ipn = entity.IPN
         entity_type_description = "stockitem"
+    elif entity_type == "location":
+        # If the entity is a stock item, retrieve information using StockItem and Part classes
+        entity = StockLocation(api, entity_id)
+        ipn = ''
+        entity_type_description = "stocklocation"
     else:
         print("Invalid entity type")
         return
@@ -46,13 +54,13 @@ def process_id(entity_id, label_size, entity_type):
     # Print information about the entity
     print(entity.description)
     print(entity.name)
-    print(entity.IPN)
+    print(ipn)
 
     # Write entity information to a CSV file
     with open('part.csv', mode='w', encoding="utf-8") as entity_csv:
         entity_writer = csv.writer(entity_csv, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         # Write a row to the CSV file containing ID, IPN, name, description, and entity type
-        entity_writer.writerow([entity_id, entity.IPN, entity.name, entity.description, entity_type_description])
+        entity_writer.writerow([entity_id, ipn, entity.name, entity.description, entity_type_description])
 
     # Typst compile
     typst_label_size = f"{label_size}.typ"
@@ -93,10 +101,10 @@ def process_id(entity_id, label_size, entity_type):
     send(instructions=instructions, printer_identifier=printer, backend_identifier=backend, blocking=True)
 
 # Dictionary for mapping numerical options to entity types
-entity_type_options = {1: "part", 2: "stock"}
+entity_type_options = {1: "part", 2: "stock", 3: "location"}
 
 # Dictionary for mapping numerical options to label sizes
-label_size_options = {1: "small", 2: "medium"}
+label_size_options = {1: "small", 2: "medium", 3: "Text+Barcode"}
 
 def inputNumber(message):
     while True:
@@ -114,6 +122,7 @@ while True:
     print("Options:")
     print("1. Process Part IDs")
     print("2. Process Stock IDs")
+    print("3. Process Location IDs")
     print("0. Quit")
 
     # Prompt the user to choose an option
@@ -128,6 +137,7 @@ while True:
         print("Label Sizes:")
         print("1. Small")
         print("2. Medium")
+        print("3. Text+Barcode")
 
         # Prompt the user until a valid label size is entered
         while True:
