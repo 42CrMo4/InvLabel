@@ -12,7 +12,7 @@ This project is designed to streamline the process of generating labels for inve
 
 - [InvenTree Server](https://github.com/inventree/InvenTree): Ensure you have InvenTree Server running and set up with your inventory data.
 - [InvenTree Python](https://github.com/inventree/inventree-python): Ensure you have InvenTree Python installed.
-- [Typst-Py](https://github.com/messense/typst-py): Install Typst to compile label templates into images.
+- [Typst-Py](https://github.com/messense/typst-py): Install Typst to compile label templates into images. (if not compiling, use the passing workflow whl form the repo)
 - [Brother_QL](https://github.com/matmair/brother_ql-inventree): Install Brother_QL to print labels on a Brother QL series label printer.
 - Python 3.x: Ensure you have Python 3.x installed.
 - [Python Dotenv](https://github.com/theskumar/python-dotenv): Install python dotenv.
@@ -22,13 +22,13 @@ This project is designed to streamline the process of generating labels for inve
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/inventory-labeling.git
+git clone https://github.com/42crmo4/InvLabel.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd inventory-labeling
+cd InvLabel
 ```
 
 3.Create a .env file in the project root with the following content:
