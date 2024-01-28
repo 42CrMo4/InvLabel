@@ -98,6 +98,17 @@ entity_type_options = {1: "part", 2: "stock"}
 # Dictionary for mapping numerical options to label sizes
 label_size_options = {1: "small", 2: "medium"}
 
+def inputNumber(message):
+    while True:
+        try:
+            userInput = int(input(message))       
+        except ValueError:
+            print("Not an integer! Try again.")
+            continue
+        else:
+            return userInput 
+            break 
+
 # Main loop
 while True:
     print("Options:")
@@ -106,7 +117,7 @@ while True:
     print("0. Quit")
 
     # Prompt the user to choose an option
-    option = int(input("Choose an option: "))
+    option = inputNumber("Choose an option: ")
 
     if option == 0:
         break
@@ -120,13 +131,14 @@ while True:
 
         # Prompt the user until a valid label size is entered
         while True:
-            label_option = int(input("Select the label size: "))
+            label_option = inputNumber("Select the label size: ")
             
             if label_option in label_size_options:
                 label_size = label_size_options[label_option]
                 break
             else:
                 print("Invalid label size option")
+                continue  # Restart the loop to ask for a valid option
     else:
         print("Invalid option. Please enter a valid option.")
         continue  # Restart the loop to ask for a valid option
@@ -141,3 +153,5 @@ while True:
     # Process each ID in the list
     for entity_id in entity_ids.split():
         process_id(entity_id, label_size, entity_type)
+
+
