@@ -8,5 +8,5 @@
 
 
 # Allow
-!sample-output/*png
-!docs/*png
+!sample-output/*
+!docs/*
