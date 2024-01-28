@@ -6,8 +6,8 @@
 
 // Set the page margins
 #set page(
-  width: 29mm, 
-  height: 19.1mm,
+  width: 25.91mm,
+  height: 18mm,
   margin: (
     y: 0mm,
     x: 0.5mm,
@@ -19,20 +19,21 @@
   // Set text position
   #set text(3mm)
   #align(center)[= #c.at(1)] // Center-align the text of the second column
-
+  #set text(5pt)
   // Create a box to contain information
-  #box(height: 40pt,
+  #box(height: 36pt,
     columns(2, gutter: 0pt)[
       //#set par(justify: true) // strech text in even spacing
-      #align(center + horizon)[
+      #align(center + top)[
         // Create a QR code with part information
         #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
-        #qrcode(x, height: 14mm) 
-        
+        #qrcode(x, height: 10.5mm) 
+        #let y = c.at(4) + ": " + c.at(0)
+        #pad(top:-1.5mm, text(y))
+
         // Set text size and display part information
-        #set text(6pt)
         *#c.at(2)* \ // Display the name of the part
-        #set text(5pt)
+        #set text(4pt)
         #c.at(3) // Display the description of the part
       ]  
     ]

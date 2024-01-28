@@ -6,8 +6,8 @@
 
 // Set the page size and margins
 #set page(
-  width: 29mm, 
-  height: 12mm,
+  width: 25.91mm, 
+  height: 13mm,
   margin: (
     y: 0mm,
     x: 0.5mm,
@@ -26,7 +26,9 @@
   #align(center + horizon)[
     // Create a QR code with part information
     #let x = "{\"" + c.at(4) + "\":" + c.at(0) +"}"
-    #qrcode(x, height: 12mm) 
+    #qrcode(x, height: 10.8mm) 
+    #let y = c.at(4) + ": " + c.at(0)
+    #pad(top:-1.5mm, text(y))
 
     // Display the part name and description
     = #c.at(1) \
