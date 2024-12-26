@@ -1,17 +1,6 @@
 # requirements.txt
-
-# InvenTree API library
 inventree==0.13.2
-
-# Python Dotenv for handling environment variables
 python-dotenv==1.0.0
-
-# Brother_QL library for printing labels
 brother-ql-inventree==1.1
-pywinusb==0.4.2  # Windows USB support
-
-# Typst library for creating QR codes in Typst files
-https://github.com/messense/typst-py/archive/master.zip
-#typst==0.10.0
-# install from master because needed patch is not released
-# pip install -U https://github.com/messense/typst-py/archive/master.zip
+pywinusb==0.4.2
+typst @ git+https://github.com/messense/typst-py.git
