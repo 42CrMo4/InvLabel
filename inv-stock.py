@@ -74,7 +74,18 @@ def process_id(entity_id, label_size, entity_type):
     # brother ql setup
     backend = 'pyusb'    # 'pyusb', 'linux_kernal', 'network'
     model = 'QL-700' # your printer model.
-    printer = 'usb://0x04f9:0x2042'    # Get these values from the Windows usb driver filter.  Linux/Raspberry Pi uses '/dev/usb/lp0'.
+    
+    # Try to detect printer automatically on Windows
+    try:
+        from brother_ql.backends.helpers import discover
+        printers = discover()
+        if printers:
+            printer = printers[0]['identifier']
+        else:
+            printer = 'usb://0x04f9:0x2042'  # Fallback to default
+    except Exception as e:
+        print(f"Warning: Could not auto-detect printer, using default: {e}")
+        printer = 'usb://0x04f9:0x2042'  # Fallback to default
 
     qlr = BrotherQLRaster(model)
     qlr.exception_on_warning = True
@@ -97,8 +108,15 @@ def process_id(entity_id, label_size, entity_type):
 
     )
 
-    # brother_ql send
-    send(instructions=instructions, printer_identifier=printer, backend_identifier=backend, blocking=True)
+    # brother_ql send with error handling
+    try:
+        send(instructions=instructions, printer_identifier=printer, backend_identifier=backend, blocking=True)
+    except Exception as e:
+        print(f"Error sending to printer: {e}")
+        print("Please ensure:")
+        print("1. Printer is connected via USB")
+        print("2. Printer drivers are installed")
+        print("3. Printer is turned on")
 
 # Dictionary for mapping numerical options to entity types
 entity_type_options = {1: "part", 2: "stock", 3: "location"}
