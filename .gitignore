@@ -10,3 +10,4 @@
 # Allow
 !sample-output/*
 !docs/*
+.aider*
