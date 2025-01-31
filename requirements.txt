@@ -1,7 +1,7 @@
 # requirements.txt
 
 # InvenTree API library
-inventree==0.13.2
+inventree==0.17.0
 
 # Python Dotenv for handling environment variables
 python-dotenv==1.0.0
