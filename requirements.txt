@@ -4,7 +4,7 @@
 inventree==0.17.0
 
 # Python Dotenv for handling environment variables
-python-dotenv==1.0.0
+python-dotenv==1.2.2
 
 # Brother_QL library for printing labels
 brother-ql-inventree==1.1
